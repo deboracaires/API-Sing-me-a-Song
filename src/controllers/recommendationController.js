@@ -16,7 +16,7 @@ async function newRecommendation(req, res) {
 
     return res.status(201).send('Recomendação criada!');
   } catch (err) {
-    if (err.name === 'LinkError') return res.status(400).send(err.message);
+    if (err.name === 'LinkError') return res.status(422).send(err.message);
     if (err.name === 'NameError') return res.status(400).send(err.message);
     if (err.name === 'LinkAlreadyRegisteredError') return res.status(409).send(err.message);
   }
