@@ -69,9 +69,23 @@ async function getRandom(req, res, next) {
   }
 }
 
+async function getTopAmout(req, res, next) {
+  try {
+    const amount = Number(req.params.amount);
+
+    const result = await recommendationService.verifyTopAmount(amount);
+
+    return res.send(result);
+  } catch (err) {
+    if (err.name === 'RecommendationEmptyError') return res.status(404).send(err.message);
+    next(err);
+  }
+}
+
 export {
   newRecommendation,
   upVote,
   downVote,
   getRandom,
+  getTopAmout,
 };

@@ -68,6 +68,12 @@ async function selectLowScore() {
   return result.rows;
 }
 
+async function selectTopAmount(amount) {
+  const result = await connection.query(`
+    SELECT * FROM recommendations ORDER BY score DESC LIMIT ${amount}
+  `);
+  return result.rows;
+}
 export {
   selectByLink,
   create,
@@ -77,4 +83,5 @@ export {
   deleteRecommendation,
   selectHighScore,
   selectLowScore,
+  selectTopAmount,
 };

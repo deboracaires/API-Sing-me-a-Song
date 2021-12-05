@@ -13,6 +13,7 @@ app.post('/recommendations/:id/upvote', recommendationController.upVote);
 app.post('/recommendations/:id/downvote', recommendationController.downVote);
 
 app.get('/recommendations/random', recommendationController.getRandom);
+app.get('/recommendations/top/:amount', recommendationController.getTopAmout);
 
 app.use(serverMiddlewareError);
 

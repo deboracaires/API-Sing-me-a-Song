@@ -85,10 +85,20 @@ async function sortRandom() {
   return lowScore[randNumber];
 }
 
+async function verifyTopAmount(amount) {
+  const result = await recommendationRepository.selectTopAmount(amount);
+
+  if (result.length === 0) {
+    throw new RecommendationEmptyError('Não há recomendações registradas!');
+  }
+
+  return result;
+}
 export {
   verifyReqData,
   verifyId,
   decreaseScore,
   sortRandom,
   sortNumber,
+  verifyTopAmount,
 };
