@@ -4,6 +4,8 @@ import { validateUrl } from 'youtube-validate';
 import LinkError from '../errors/LinkError.js';
 import NameError from '../errors/NameError.js';
 import LinkAlreadyRegisteredError from '../errors/LinkAlreadyRegisteredError.js';
+import InvalidIdError from '../errors/InvalidIdError.js';
+import IdNotFoundError from '../errors/IdNotFoundError.js';
 
 import * as recommendationRepository from '../repositories/recommendationRepository.js';
 
@@ -17,7 +19,7 @@ async function verifyReqData(name, link) {
     throw new NameError('Nome inválido, deve ser uma string');
   }
 
-  const checkLink = await recommendationRepository.select(link);
+  const checkLink = await recommendationRepository.selectByLink(link);
 
   if (checkLink !== false) {
     throw new LinkAlreadyRegisteredError('Link já recomendado');
@@ -26,6 +28,17 @@ async function verifyReqData(name, link) {
   return true;
 }
 
+async function upScore(id) {
+  if (id < 1) throw new InvalidIdError('Id inválido!');
+
+  const checkId = await recommendationRepository.selectById(id);
+
+  if (checkId === false) throw new IdNotFoundError('Não há link registrado nesse id!');
+
+  return true;
+}
+
 export {
   verifyReqData,
+  upScore,
 };
