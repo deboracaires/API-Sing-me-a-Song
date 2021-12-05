@@ -40,9 +40,25 @@ async function increaseScore(id) {
   return result.rows[0];
 }
 
+async function decreaseScore(id, score) {
+  const result = await connection.query(`
+    UPDATE recommendations SET "score" = $2 WHERE id = $1 RETURNING *
+  `, [id, score]);
+  return result.rows[0];
+}
+
+async function deleteRecommendation(id) {
+  await connection.query(`
+    DELETE FROM recommendations WHERE id = $1 
+  `, [id]);
+  return true;
+}
+
 export {
   selectByLink,
   create,
   selectById,
   increaseScore,
+  decreaseScore,
+  deleteRecommendation,
 };

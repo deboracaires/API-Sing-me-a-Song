@@ -10,6 +10,7 @@ app.use(express.json());
 
 app.post('/recommendations', recommendationController.newRecommendation);
 app.post('/recommendations/:id/upvote', recommendationController.upVote);
+app.post('/recommendations/:id/downvote', recommendationController.downVote);
 
 app.use(serverMiddlewareError);
 

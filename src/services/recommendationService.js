@@ -28,7 +28,7 @@ async function verifyReqData(name, link) {
   return true;
 }
 
-async function upScore(id) {
+async function verifyId(id) {
   if (id < 1) throw new InvalidIdError('Id inválido!');
 
   const checkId = await recommendationRepository.selectById(id);
@@ -38,7 +38,27 @@ async function upScore(id) {
   return true;
 }
 
+async function decreaseScore(id) {
+  if (id < 1) throw new InvalidIdError('Id inválido!');
+
+  const recommendation = await recommendationRepository.selectById(id);
+
+  if (recommendation === false) throw new IdNotFoundError('Não há link registrado nesse id!');
+
+  let score = Number(recommendation.score);
+
+  if (score === -5) {
+    await recommendationRepository.deleteRecommendation(id);
+    return false;
+  }
+
+  score -= 1;
+
+  return score;
+}
+
 export {
   verifyReqData,
-  upScore,
+  verifyId,
+  decreaseScore,
 };
