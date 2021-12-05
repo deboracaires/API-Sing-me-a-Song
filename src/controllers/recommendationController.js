@@ -59,8 +59,19 @@ async function downVote(req, res, next) {
   }
 }
 
+async function getRandom(req, res, next) {
+  try {
+    const result = await recommendationService.sortRandom();
+    return res.send(result);
+  } catch (err) {
+    if (err.name === 'RecommendationEmptyError') return res.status(404).send(err.message);
+    next(err);
+  }
+}
+
 export {
   newRecommendation,
   upVote,
   downVote,
+  getRandom,
 };

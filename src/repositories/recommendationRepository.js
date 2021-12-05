@@ -54,6 +54,20 @@ async function deleteRecommendation(id) {
   return true;
 }
 
+async function selectHighScore() {
+  const result = await connection.query(`
+    SELECT * FROM recommendations WHERE score > 10 ORDER BY id ASC
+  `);
+  return result.rows;
+}
+
+async function selectLowScore() {
+  const result = await connection.query(`
+    SELECT * FROM recommendations WHERE score <= 10 ORDER BY id ASC
+  `);
+  return result.rows;
+}
+
 export {
   selectByLink,
   create,
@@ -61,4 +75,6 @@ export {
   increaseScore,
   decreaseScore,
   deleteRecommendation,
+  selectHighScore,
+  selectLowScore,
 };

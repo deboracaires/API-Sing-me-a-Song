@@ -6,6 +6,7 @@ import NameError from '../errors/NameError.js';
 import LinkAlreadyRegisteredError from '../errors/LinkAlreadyRegisteredError.js';
 import InvalidIdError from '../errors/InvalidIdError.js';
 import IdNotFoundError from '../errors/IdNotFoundError.js';
+import RecommendationEmptyError from '../errors/RecommendationEmptyError.js';
 
 import * as recommendationRepository from '../repositories/recommendationRepository.js';
 
@@ -57,8 +58,37 @@ async function decreaseScore(id) {
   return score;
 }
 
+async function sortNumber(max, min) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+async function sortRandom() {
+  const highScore = await recommendationRepository.selectHighScore();
+  const lowScore = await recommendationRepository.selectLowScore();
+  if (highScore.length === 0 && lowScore.length === 0) throw new RecommendationEmptyError('Não há recomendações registradas!');
+  if (highScore.length === 0 && lowScore.length !== 0) {
+    const randomNumber = await sortNumber((lowScore.length - 1), 0);
+    return lowScore[randomNumber];
+  }
+  if (highScore.length !== 0 && lowScore.length === 0) {
+    const randomNumber = await sortNumber((highScore.length - 1), 0);
+    return highScore[randomNumber];
+  }
+  const probSort = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1];
+  const randomNumber = await sortNumber(9, 0);
+
+  if (probSort[randomNumber] === 0) {
+    const randNumber = await sortNumber((highScore.length - 1), 0);
+    return highScore[randNumber];
+  }
+  const randNumber = await sortNumber((lowScore.length - 1), 0);
+  return lowScore[randNumber];
+}
+
 export {
   verifyReqData,
   verifyId,
   decreaseScore,
+  sortRandom,
+  sortNumber,
 };

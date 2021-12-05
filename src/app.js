@@ -12,6 +12,8 @@ app.post('/recommendations', recommendationController.newRecommendation);
 app.post('/recommendations/:id/upvote', recommendationController.upVote);
 app.post('/recommendations/:id/downvote', recommendationController.downVote);
 
+app.get('/recommendations/random', recommendationController.getRandom);
+
 app.use(serverMiddlewareError);
 
 export default app;
