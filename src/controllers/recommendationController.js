@@ -27,7 +27,7 @@ async function upVote(req, res, next) {
 
     if (!id) return res.status(400).send('Precisa ter um id');
 
-    await recommendationService.upScore(id);
+    await recommendationService.verifyId(id);
 
     const result = await recommendationRepository.increaseScore(id);
 
@@ -39,7 +39,28 @@ async function upVote(req, res, next) {
   }
 }
 
+async function downVote(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+
+    if (!id) return res.status(400).send('Precisa ter um id');
+
+    const newScore = await recommendationService.decreaseScore(id);
+
+    if (newScore === false) return res.sendStatus(201);
+
+    await recommendationRepository.decreaseScore(id, newScore);
+
+    return res.sendStatus(201);
+  } catch (err) {
+    if (err.name === 'InvalidIdError') return res.status(400).send(err.message);
+    if (err.name === 'IdNotFoundError') return res.status(404).send(err.message);
+    next(err);
+  }
+}
+
 export {
   newRecommendation,
   upVote,
+  downVote,
 };
