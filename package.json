@@ -8,6 +8,7 @@
     "start": "NODE_ENV=prod node src/server.js",
     "dev": "NODE_ENV=dev nodemon src/server.js",
     "test": "NODE_ENV=test npx jest --watch -i",
+    "test-c": "NODE_ENV=test npx jest -i --coverage",
     "test-server": "NODE_ENV=test nodemon src/server.js",
     "test-once": "NODE_ENV=test npx jest -i"
   },
@@ -15,9 +16,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "babel-jest": "^27.4.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jest": "^27.4.3",
     "pg": "^8.7.1",
     "youtube-validate": "^1.2.4"
   },

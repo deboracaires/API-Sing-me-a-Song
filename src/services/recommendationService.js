@@ -9,6 +9,7 @@ import IdNotFoundError from '../errors/IdNotFoundError.js';
 import RecommendationEmptyError from '../errors/RecommendationEmptyError.js';
 
 import * as recommendationRepository from '../repositories/recommendationRepository.js';
+import sortRecommendation from '../validation/sortRecommendation.js';
 
 async function verifyReqData(name, link) {
   await validateUrl(link)
@@ -74,15 +75,8 @@ async function sortRandom() {
     const randomNumber = await sortNumber((highScore.length - 1), 0);
     return highScore[randomNumber];
   }
-  const probSort = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1];
-  const randomNumber = await sortNumber(9, 0);
-
-  if (probSort[randomNumber] === 0) {
-    const randNumber = await sortNumber((highScore.length - 1), 0);
-    return highScore[randNumber];
-  }
-  const randNumber = await sortNumber((lowScore.length - 1), 0);
-  return lowScore[randNumber];
+  const result = sortRecommendation(highScore, lowScore);
+  return result;
 }
 
 async function verifyTopAmount(amount) {
