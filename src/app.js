@@ -8,7 +8,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/recommendation', recommendationController.newRecommendation);
+app.post('/recommendations', recommendationController.newRecommendation);
+app.post('/recommendations/:id/upvote', recommendationController.upVote);
 
 app.use(serverMiddlewareError);
 

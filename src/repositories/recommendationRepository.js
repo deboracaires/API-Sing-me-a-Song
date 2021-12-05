@@ -1,6 +1,6 @@
 import connection from '../database/database.js';
 
-async function select(link) {
+async function selectByLink(link) {
   const result = await connection.query(`
         SELECT * FROM recommendations WHERE "youtubeLink" = $1
     `, [link]);
@@ -19,7 +19,30 @@ async function create(name, link) {
   return result.rows;
 }
 
+async function selectById(id) {
+  const result = await connection.query(`
+        SELECT * FROM recommendations WHERE id = $1
+    `, [id]);
+
+  if (result.rowCount === 0) {
+    return false;
+  }
+  return result.rows[0];
+}
+
+async function increaseScore(id) {
+  const recommendation = await selectById(id);
+  const score = Number(recommendation.score) + 1;
+  const result = await connection.query(`
+    UPDATE recommendations SET "score" = $2 WHERE id = $1 RETURNING *
+  `, [id, score]);
+
+  return result.rows[0];
+}
+
 export {
-  select,
+  selectByLink,
   create,
+  selectById,
+  increaseScore,
 };
